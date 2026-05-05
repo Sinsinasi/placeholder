@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WAS Dashboard</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.min.js"></script>
+</head>
+<body>
+    <!-- Animated background layers -->
+    <div class="bg-mesh"></div>
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-2"></div>
+    <div class="bg-orb bg-orb-3"></div>
+    <div class="bg-noise"></div>
+
+    <!-- Sidebar -->
+    <nav class="sidebar">
+        <div class="logo">WAS</div>
+        <div class="sidebar-clock" id="sidebar-clock"></div>
+        <div class="nav-links">
+            <a class="nav-link active" data-page="notes">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+                    <path d="M15.5 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.5L15.5 3Z"/>
+                    <polyline points="14 3 14 9 21 9"/>
+                </svg>
+                <span>Notes</span>
+            </a>
+            <a class="nav-link" data-page="trading">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+                    <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+                    <polyline points="16 7 22 7 22 13"/>
+                </svg>
+                <span>Trading</span>
+            </a>
+            <a class="nav-link" data-page="social">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+                    <circle cx="12" cy="8" r="3"/>
+                    <path d="M5 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2"/>
+                    <circle cx="6" cy="6" r="1.5"/>
+                    <circle cx="18" cy="6" r="1.5"/>
+                </svg>
+                <span>Social</span>
+            </a>
+            <a class="nav-link" data-page="finances">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20">
+                    <line x1="12" y1="1" x2="12" y2="23"/>
+                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                </svg>
+                <span>Finances</span>
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="content">
+
+        <!-- ==================== HOME PAGE ==================== -->
+        <section id="home-page" class="page active">
+            <div class="home-3d-scene">
+                <div class="home-3d-overlay">
+                    <div class="home-header">
+                        <p class="home-subtitle">Personal Dashboard</p>
+                    </div>
+                </div>
+                <div id="home-3d-container"></div>
+                <div id="home-3d-labels" class="home-3d-labels"></div>
+            </div>
+        </section>
+
+        <!-- ==================== NOTES PAGE ==================== -->
+        <section id="notes-page" class="page">
+            <div class="page-header">
+                <h1>Notes</h1>
+                <div class="page-actions">
+                    <div class="search-box">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        </svg>
+                        <input type="text" id="notes-search" placeholder="Search notes...">
+                    </div>
+                    <button id="add-note-btn" class="btn btn-primary">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                            <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                        </svg>
+                        Add Note
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quick-add bar -->
+            <div id="notes-quick-add" class="notes-quick-add">
+                <div class="quick-add-input">Take a note...</div>
+                <div class="quick-add-actions">
+                    <button class="btn-icon" data-quick="checklist" title="New checklist">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                    </button>
+                    <button class="btn-icon" data-quick="text" title="New text note">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.5L15.5 3Z"/><polyline points="14 3 14 9 21 9"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="notes-layout">
+                <!-- Label sidebar -->
+                <div id="notes-label-sidebar" class="notes-label-sidebar"></div>
+                <!-- Notes grid -->
+                <div class="notes-main">
+                    <div id="notes-grid" class="notes-grid"></div>
+                    <div id="notes-empty" class="empty-state">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="48" height="48">
+                            <path d="M15.5 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.5L15.5 3Z"/>
+                            <polyline points="14 3 14 9 21 9"/>
+                        </svg>
+                        <p>No notes yet. Take a note above!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== TRADING PAGE ==================== -->
+        <section id="trading-page" class="page">
+            <div class="page-header">
+                <h1>Trading Journal</h1>
+                <div class="trading-header-controls">
+                    <select id="trading-account-filter" class="month-filter-select account-filter-select" title="Account"></select>
+                    <button id="trading-manage-accounts-btn" class="btn-icon manage-accounts-btn" title="Manage accounts">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.01a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    </button>
+                    <select id="trading-month-filter" class="month-filter-select">
+                        <option value="all">All Time</option>
+                    </select>
+                    <button id="add-trade-btn" class="btn btn-primary">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+                        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                    Add Trade
+                </button>
+                </div>
+            </div>
+            <div class="trading-layout">
+            <div class="trading-main">
+            <div class="stats-grid" id="trading-stats">
+                <div class="stat-card stat-card-accent">
+                    <span class="stat-label">Total P&L</span>
+                    <span class="stat-value" id="stat-total-pnl">$0.00</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Win Rate</span>
+                    <span class="stat-value" id="stat-win-rate">0%</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Total Trades</span>
+                    <span class="stat-value" id="stat-total-trades">0</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Profit Factor</span>
+                    <span class="stat-value" id="stat-profit-factor">--</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Avg Win</span>
+                    <span class="stat-value" id="stat-avg-win">$0.00</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Avg Loss</span>
+                    <span class="stat-value" id="stat-avg-loss">$0.00</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Best Trade</span>
+                    <span class="stat-value" id="stat-best-trade">--</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Worst Trade</span>
+                    <span class="stat-value" id="stat-worst-trade">--</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Win Streak</span>
+                    <span class="stat-value" id="stat-win-streak">
+                        <span class="streak-badge streak-badge-win">0</span>
+                    </span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Loss Streak</span>
+                    <span class="stat-value" id="stat-loss-streak">
+                        <span class="streak-badge streak-badge-loss">0</span>
+                    </span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Plan R:R</span>
+                    <span class="stat-value" id="stat-avg-planned-rr">--</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Actual R:R</span>
+                    <span class="stat-value" id="stat-avg-actual-rr">--</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Breakeven WR</span>
+                    <span class="stat-value" id="stat-breakeven-wr">--</span>
+                </div>
+                <div class="stat-card" id="stat-missed-card" style="display:none">
+                    <span class="stat-label">Missed Trades</span>
+                    <span class="stat-value" id="stat-missed-count">0</span>
+                </div>
+                <div class="stat-card" id="stat-missed-pnl-card" style="display:none">
+                    <span class="stat-label">Missed P&L</span>
+                    <span class="stat-value" id="stat-missed-pnl">$0.00</span>
+                </div>
+                <div class="stat-card" id="stat-early-close-card" style="display:none">
+                    <span class="stat-label">Early Closes</span>
+                    <span class="stat-value" id="stat-early-close-count">0</span>
+                </div>
+                <div class="stat-card" id="stat-left-on-table-card" style="display:none">
+                    <span class="stat-label">Left on Table</span>
+                    <span class="stat-value" id="stat-left-on-table">$0.00</span>
+                </div>
+            </div>
+            <div class="chart-card" id="equity-curve-card" style="display:none; margin-bottom: 20px;">
+                <h3>Equity Curve</h3>
+                <div class="chart-wrapper">
+                    <canvas id="equity-curve"></canvas>
+                </div>
+            </div>
+            <div class="table-container">
+                <table id="trades-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Pair</th>
+                            <th>Type</th>
+                            <th>Status</th>
+                            <th>Entry</th>
+                            <th>SL</th>
+                            <th>TP</th>
+                            <th>Exit</th>
+                            <th>Lots</th>
+                            <th>Plan R:R</th>
+                            <th>Actual R:R</th>
+                            <th>P&L</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="trades-tbody"></tbody>
+                </table>
+            </div>
+            <div id="trades-empty" class="empty-state">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="48" height="48">
+                    <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/>
+                    <polyline points="16 7 22 7 22 13"/>
+                </svg>
+                <p>No trades yet. Start logging your trades!</p>
+            </div>
+            </div><!-- /.trading-main -->
+
+            <aside class="trading-ai-sidebar" id="trading-ai-sidebar">
+                <div class="ai-sidebar-header">
+                    <h3>AI Coach</h3>
+                    <div class="ai-header-actions">
+                        <button id="ai-clear-chat-btn" class="btn-icon" title="Clear chat for this account">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/></svg>
+                        </button>
+                        <button id="ai-settings-btn" class="btn-icon" title="AI settings">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.01a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                        </button>
+                    </div>
+                </div>
+                <div id="ai-messages" class="ai-messages">
+                    <div class="ai-empty">Add a Gemini API key in settings, then start chatting.</div>
+                </div>
+                <div class="ai-quick-actions">
+                    <button class="ai-chip" data-prompt="summary" type="button">Summarize</button>
+                    <button class="ai-chip" data-prompt="emotions" type="button">Emotional patterns</button>
+                    <button class="ai-chip" data-prompt="weekly" type="button">What to fix</button>
+                </div>
+                <div class="ai-input-row">
+                    <textarea id="ai-input" class="input ai-input" rows="2" placeholder="Ask the coach..."></textarea>
+                    <button id="ai-send-btn" class="btn btn-primary" disabled type="button">Send</button>
+                </div>
+                <div id="ai-status" class="ai-status"></div>
+            </aside>
+            </div><!-- /.trading-layout -->
+        </section>
+
+        <!-- ==================== SOCIAL PAGE ==================== -->
+        <section id="social-page" class="page">
+            <div class="page-header">
+                <h1>Social</h1>
+                <div class="social-header-controls">
+                    <select id="social-brand-filter" class="month-filter-select"></select>
+                    <button id="social-manage-brands-btn" class="btn-icon manage-accounts-btn" title="Manage brands">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33h.01a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82v.01a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Empty state when no brands -->
+            <div id="social-empty" class="empty-state" style="display:none">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="48" height="48">
+                    <circle cx="12" cy="8" r="3"/>
+                    <path d="M5 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2"/>
+                </svg>
+                <p>No brands yet. Add your first brand (e.g. "Cooking", "Tech reviews") to get started.</p>
+                <button id="social-empty-add-btn" class="btn btn-primary" style="margin-top: 12px;">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16">
+                        <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                    Add your first brand
+                </button>
+            </div>
+
+            <!-- Brand content (visible when at least one brand exists) -->
+            <div id="social-brand-content">
+                <!-- Platform tabs -->
+                <div class="social-tabs" id="social-tabs"></div>
+
+                <!-- Per-platform view -->
+                <div id="social-platform-view">
+                    <!-- Profile / Account card -->
+                    <div class="social-card social-profile-card" id="social-profile-card">
+                        <div class="social-card-header">
+                            <h3>Account info</h3>
+                            <div class="social-card-header-actions">
+                                <a id="social-visit-link" class="btn btn-secondary btn-sm" href="#" target="_blank" rel="noopener" style="display:none">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+                                    Visit
+                                </a>
+                                <button id="social-save-profile-btn" class="btn btn-primary btn-sm">Save</button>
+                            </div>
+                        </div>
+                        <div class="social-grid">
+                            <div class="social-profile-field">
+                                <label>Handle</label>
+                                <input type="text" id="social-handle" class="input" placeholder="@yourhandle">
+                            </div>
+                            <div class="social-profile-field">
+                                <label>Profile URL</label>
+                                <input type="url" id="social-url" class="input" placeholder="https://...">
+                            </div>
+                            <div class="social-profile-field">
+                                <label>Connected email</label>
+                                <input type="email" id="social-email" class="input" placeholder="account@example.com">
+                            </div>
+                            <div class="social-profile-field">
+                                <label>Recovery email</label>
+                                <input type="email" id="social-recovery-email" class="input" placeholder="backup@example.com">
+                            </div>
+                            <div class="social-profile-field">
+                                <label>Recovery phone</label>
+                                <input type="text" id="social-recovery-phone" class="input" placeholder="+41 ...">
+                            </div>
+                            <div class="social-profile-field">
+                                <label>2FA method</label>
+                                <input type="text" id="social-twofa" class="input" placeholder="Authenticator app / SMS / email...">
+                            </div>
+                            <div class="social-profile-field">
+                                <label>Posting cadence</label>
+                                <input type="text" id="social-cadence" class="input" placeholder="3 reels/week, 1 long video/month...">
+                            </div>
+                            <div class="social-profile-field">
+                                <label>Current followers</label>
+                                <input type="number" id="social-followers" class="input" min="0" step="1" placeholder="0">
+                            </div>
+                            <div class="social-profile-field social-profile-field-wide">
+                                <label>Niche / target audience</label>
+                                <input type="text" id="social-niche" class="input" placeholder="What this profile is about, target audience...">
+                            </div>
+                            <div class="social-profile-field social-profile-field-wide">
+                                <label>Goals</label>
+                                <textarea id="social-goals" class="input" rows="2" placeholder="What am I trying to achieve here? Target follower count, monetisation, brand deals..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Current focus -->
+                    <div class="social-card">
+                        <div class="social-card-header">
+                            <h3>What I'm working on right now</h3>
+                            <button id="social-save-focus-btn" class="btn btn-primary btn-sm">Save</button>
+                        </div>
+                        <textarea id="social-focus" class="input" rows="4" placeholder="Current series, projects, experiments, themes you're testing..."></textarea>
+                    </div>
+
+                    <!-- Ideas backlog -->
+                    <div class="social-card">
+                        <div class="social-card-header">
+                            <h3>Ideas</h3>
+                            <button id="social-add-idea-btn" class="btn btn-primary btn-sm">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="14" height="14"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                                Add idea
+                            </button>
+                        </div>
+                        <div id="social-ideas-list" class="social-ideas-list"></div>
+                        <div id="social-ideas-empty" class="social-ideas-empty">No ideas yet. Brainstorm something!</div>
+                    </div>
+
+                    <!-- Free notes -->
+                    <div class="social-card">
+                        <div class="social-card-header">
+                            <h3>Notes</h3>
+                            <button id="social-save-notes-btn" class="btn btn-primary btn-sm">Save</button>
+                        </div>
+                        <textarea id="social-notes" class="input" rows="6" placeholder="Anything else: collaboration contacts, hashtags that work, lessons learned, sponsorship history..."></textarea>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==================== FINANCES PAGE ==================== -->
+        <section id="finances-page" class="page">
+            <div class="page-header">
+                <h1>Finances</h1>
+                <div class="page-actions">
+                    <div class="filter-group">
+                        <select id="finance-month-filter" class="input"></select>
+                        <select id="finance-category-filter" class="input">
+                            <option value="all">All Categories</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Balance Card -->
+            <div class="balance-card">
+                <div class="balance-card-inner">
+                    <span class="balance-label">Total Balance</span>
+                    <span class="balance-amount" id="balance-amount">CHF 0.00</span>
+                    <div class="balance-actions">
+                        <button class="btn btn-income" id="add-income-btn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18">
+                                <line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>
+                            </svg>
+                            Add Money
+                        </button>
+                        <button class="btn btn-expense" id="add-expense-btn">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18">
+                                <line x1="5" y1="12" x2="19" y2="12"/>
+                            </svg>
+                            Subtract Money
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Budget Progress -->
+            <div class="budget-section" id="budget-section">
+                <div class="budget-bar-container">
+                    <div class="budget-header">
+                        <div class="budget-header-left">
+                            <h3>Monthly Budget</h3>
+                            <span class="budget-amount" id="budget-amount-display">CHF 0 / CHF 0</span>
+                        </div>
+                        <button class="budget-edit-btn" id="budget-edit-btn">Set Budget</button>
+                    </div>
+                    <div class="progress-track">
+                        <div class="progress-fill under-budget" id="budget-progress-fill" style="width: 0%"></div>
+                    </div>
+                    <div class="budget-labels">
+                        <span class="budget-spent" id="budget-spent-label">CHF 0 spent</span>
+                        <span id="budget-remaining-label">CHF 0 remaining</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <span class="stat-label">Total Income</span>
+                    <span class="stat-value stat-income" id="stat-total-income">CHF 0.00</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Total Expenses</span>
+                    <span class="stat-value stat-expense" id="stat-total-spent">CHF 0.00</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">This Month (Budget)</span>
+                    <span class="stat-value" id="stat-month-spent">CHF 0.00</span>
+                </div>
+                <div class="stat-card">
+                    <span class="stat-label">Top Category</span>
+                    <span class="stat-value" id="stat-top-category">--</span>
+                </div>
+            </div>
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3>Spending by Category</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="expense-chart-pie"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h3>Monthly Overview</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="expense-chart-bar"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="table-container">
+                <table id="expenses-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Type</th>
+                            <th>Category</th>
+                            <th>Description</th>
+                            <th>Amount</th>
+                            <th>Budget</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="expenses-tbody"></tbody>
+                </table>
+            </div>
+            <div id="expenses-empty" class="empty-state">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="48" height="48">
+                    <line x1="12" y1="1" x2="12" y2="23"/>
+                    <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                </svg>
+                <p>No transactions yet. Start tracking your money!</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- ==================== NOTE MODAL ==================== -->
+    <div id="note-modal" class="modal">
+        <div class="modal-overlay" data-close-modal></div>
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h2 id="note-modal-title">Add Note</h2>
+                <button class="modal-close" data-close-modal>&times;</button>
+            </div>
+            <form id="note-form">
+                <input type="hidden" id="note-id">
+                <!-- Type toggle -->
+                <div class="note-type-toggle">
+                    <button type="button" id="note-type-text" class="note-type-btn active">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15.5 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.5L15.5 3Z"/><polyline points="14 3 14 9 21 9"/></svg>
+                        Text
+                    </button>
+                    <button type="button" id="note-type-checklist" class="note-type-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+                        Checklist
+                    </button>
+                </div>
+                <div class="form-group">
+                    <label for="note-title">Title</label>
+                    <input type="text" id="note-title" class="input" placeholder="Note title">
+                </div>
+                <!-- Text content -->
+                <div id="note-text-section" class="form-group">
+                    <label>Content</label>
+                    <div class="rich-editor-wrap">
+                        <div class="rich-toolbar" id="note-toolbar">
+                            <button type="button" data-cmd="bold" title="Bold (Ctrl+B)"><strong>B</strong></button>
+                            <button type="button" data-cmd="italic" title="Italic (Ctrl+I)"><em>I</em></button>
+                            <button type="button" data-cmd="underline" title="Underline (Ctrl+U)"><u>U</u></button>
+                            <button type="button" data-cmd="strikeThrough" title="Strikethrough"><s>S</s></button>
+                            <span class="toolbar-sep"></span>
+                            <button type="button" data-cmd="insertOrderedList" title="Numbered List">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="10" y1="6" x2="21" y2="6"/><line x1="10" y1="12" x2="21" y2="12"/><line x1="10" y1="18" x2="21" y2="18"/><text x="2" y="7" font-size="7" fill="currentColor" stroke="none" font-family="sans-serif">1</text><text x="2" y="13" font-size="7" fill="currentColor" stroke="none" font-family="sans-serif">2</text><text x="2" y="19" font-size="7" fill="currentColor" stroke="none" font-family="sans-serif">3</text></svg>
+                            </button>
+                            <button type="button" data-cmd="insertUnorderedList" title="Bullet List">
+                                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="9" y1="6" x2="20" y2="6"/><line x1="9" y1="12" x2="20" y2="12"/><line x1="9" y1="18" x2="20" y2="18"/><circle cx="4" cy="6" r="1.5" fill="currentColor"/><circle cx="4" cy="12" r="1.5" fill="currentColor"/><circle cx="4" cy="18" r="1.5" fill="currentColor"/></svg>
+                            </button>
+                            <span class="toolbar-sep"></span>
+                            <select data-cmd="formatBlock" title="Heading" class="toolbar-select">
+                                <option value="">Normal</option>
+                                <option value="h2">Heading</option>
+                                <option value="h3">Subheading</option>
+                                <option value="blockquote">Quote</option>
+                            </select>
+                            <span class="toolbar-sep"></span>
+                            <label class="toolbar-color-btn" title="Text Color">
+                                <span class="toolbar-color-label">A</span>
+                                <input type="color" data-cmd="foreColor" value="#ffffff" class="toolbar-color-input">
+                            </label>
+                            <label class="toolbar-color-btn" title="Highlight">
+                                <span class="toolbar-color-label toolbar-highlight-icon">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>
+                                </span>
+                                <input type="color" data-cmd="hiliteColor" value="#7c5cfc" class="toolbar-color-input">
+                            </label>
+                            <span class="toolbar-sep"></span>
+                            <button type="button" data-cmd="removeFormat" title="Clear Formatting">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                            </button>
+                        </div>
+                        <div id="note-content" class="rich-editor" contenteditable="true" data-placeholder="Write your note..."></div>
+                    </div>
+                    <div class="note-word-count" id="note-word-count">0 words, 0 chars</div>
+                </div>
+                <!-- Checklist editor -->
+                <div id="note-checklist-section" class="form-group" style="display:none">
+                    <label>Checklist Items</label>
+                    <div id="note-checklist-editor" class="checklist-editor"></div>
+                </div>
+                <!-- Labels -->
+                <div class="form-group">
+                    <label>Labels</label>
+                    <div id="note-label-picker" class="label-picker"></div>
+                </div>
+                <!-- Color -->
+                <div class="form-group">
+                    <label>Color</label>
+                    <div id="note-colors" class="color-picker"></div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== LABEL MANAGER MODAL ==================== -->
+    <div id="label-manager-modal" class="modal">
+        <div class="modal-overlay" data-close-modal></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Manage Labels</h2>
+                <button class="modal-close" data-close-modal>&times;</button>
+            </div>
+            <div class="label-manager-add-row">
+                <input type="text" id="label-manager-new" class="input" placeholder="New label name...">
+                <button type="button" id="label-manager-add-btn" class="btn btn-primary btn-sm">Add</button>
+            </div>
+            <div id="label-manager-list" class="label-manager-list"></div>
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+                <button type="button" id="label-manager-save-btn" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== TRADE MODAL ==================== -->
+    <div id="trade-modal" class="modal">
+        <div class="modal-overlay" data-close-modal></div>
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h2 id="trade-modal-title">Add Trade</h2>
+                <button class="modal-close" data-close-modal>&times;</button>
+            </div>
+            <form id="trade-form">
+                <input type="hidden" id="trade-id">
+                <div class="form-group" id="trade-accounts-row" style="display:none">
+                    <label>Save to accounts <span class="trade-accounts-hint">(each account stores its own copy in its currency)</span></label>
+                    <div id="trade-accounts-checkboxes" class="trade-accounts-checkboxes"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="trade-date">Date</label>
+                        <input type="date" id="trade-date" class="input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="trade-ticker">Pair</label>
+                        <input type="text" id="trade-ticker" class="input" placeholder="EUR/USD" required>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="trade-type">Type</label>
+                        <select id="trade-type" class="input" required>
+                            <option value="long">Long</option>
+                            <option value="short">Short</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="trade-status">Status</label>
+                        <select id="trade-status" class="input" required>
+                            <option value="closed">Closed</option>
+                            <option value="open">Open</option>
+                            <option value="missed">Missed</option>
+                            <option value="early_close">Closed Early</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="trade-entry">Entry Price</label>
+                        <input type="number" id="trade-entry" class="input" step="0.00001" min="0" placeholder="1.08500" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="trade-exit">Exit Price</label>
+                        <input type="number" id="trade-exit" class="input" step="0.00001" min="0" placeholder="1.09000">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="trade-sl">Stop Loss</label>
+                        <input type="number" id="trade-sl" class="input" step="0.00001" min="0" placeholder="1.08000">
+                    </div>
+                    <div class="form-group">
+                        <label for="trade-tp">Take Profit</label>
+                        <input type="number" id="trade-tp" class="input" step="0.00001" min="0" placeholder="1.09500">
+                    </div>
+                </div>
+                <div class="form-row" id="trade-tp-hit-row" style="display:none">
+                    <div class="form-group">
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="trade-tp-hit">
+                            <span>TP was hit after I closed (track potential profit left on the table)</span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="trade-quantity">Lots</label>
+                        <input type="number" id="trade-quantity" class="input" step="0.01" min="0" placeholder="1.00" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="trade-lot-size">Lot Size</label>
+                        <select id="trade-lot-size" class="input">
+                            <option value="100000">Standard (100K)</option>
+                            <option value="10000">Mini (10K)</option>
+                            <option value="1000">Micro (1K)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="trade-fees">Fees / Commission <span id="trade-fees-currency-hint" class="currency-hint"></span></label>
+                        <input type="number" id="trade-fees" class="input" step="0.01" min="0" placeholder="0.00" value="0">
+                    </div>
+                    <div class="form-group"></div>
+                </div>
+                <div class="form-group">
+                    <label for="trade-notes">Notes</label>
+                    <textarea id="trade-notes" class="input" rows="3" placeholder="Trade notes..."></textarea>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== COPY TRADE MODAL ==================== -->
+    <div id="copy-trade-modal" class="modal">
+        <div class="modal-overlay" data-close-modal></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Copy trade to other accounts</h2>
+                <button class="modal-close" data-close-modal>&times;</button>
+            </div>
+            <input type="hidden" id="copy-trade-id">
+            <p id="copy-trade-summary" class="copy-trade-summary"></p>
+            <div class="form-group">
+                <label>Target accounts</label>
+                <div id="copy-trade-targets" class="trade-accounts-checkboxes"></div>
+            </div>
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+                <button type="button" id="copy-trade-confirm-btn" class="btn btn-primary">Copy</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== ACCOUNT MANAGER MODAL ==================== -->
+    <div id="account-manager-modal" class="modal">
+        <div class="modal-overlay" data-close-modal></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Manage Trading Accounts</h2>
+                <button class="modal-close" data-close-modal>&times;</button>
+            </div>
+            <div class="label-manager-add-row">
+                <input type="text" id="account-manager-new" class="input" placeholder="New account name...">
+                <button type="button" id="account-manager-add-btn" class="btn btn-primary btn-sm">Add</button>
+            </div>
+            <div id="account-manager-list" class="label-manager-list"></div>
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+                <button type="button" id="account-manager-save-btn" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== AI SETTINGS MODAL ==================== -->
+    <div id="ai-settings-modal" class="modal">
+        <div class="modal-overlay" data-close-modal></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>AI Coach Settings</h2>
+                <button class="modal-close" data-close-modal>&times;</button>
+            </div>
+            <div class="form-group">
+                <label for="ai-key-input">Gemini API Key</label>
+                <div class="ai-key-row">
+                    <input type="password" id="ai-key-input" class="input" placeholder="AIza..." autocomplete="off" spellcheck="false">
+                    <button type="button" id="ai-key-toggle" class="btn-icon" title="Show/hide">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+                    </button>
+                </div>
+                <div id="ai-key-status" class="ai-key-status"></div>
+            </div>
+            <div class="form-group">
+                <label for="ai-model-select">Model</label>
+                <select id="ai-model-select" class="input">
+                    <option value="gemini-2.5-flash">Gemini 2.5 Flash (recommended)</option>
+                    <option value="gemini-2.5-flash-lite">Gemini 2.5 Flash Lite (faster, lower quality)</option>
+                </select>
+            </div>
+            <div class="ai-help">
+                <p><strong>How to get a key:</strong> Go to <a href="https://aistudio.google.com/" target="_blank" rel="noopener">aistudio.google.com</a>, sign in, click "Get API key", create one, paste it here.</p>
+                <p><strong>Tip:</strong> in AI Studio, set a daily quota cap so a leaked key can't run up usage.</p>
+                <p>Your key is stored only in this browser's localStorage. Click "Clear key" anytime to remove it.</p>
+            </div>
+            <div class="form-actions ai-settings-actions">
+                <button type="button" id="ai-clear-all-chats-btn" class="btn btn-danger" title="Erase all chat history across every account">Clear all chats</button>
+                <button type="button" id="ai-key-clear-btn" class="btn btn-danger">Clear key</button>
+                <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+                <button type="button" id="ai-key-save-btn" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== SOCIAL BRAND MANAGER MODAL ==================== -->
+    <div id="social-brand-modal" class="modal">
+        <div class="modal-overlay" data-close-modal></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Manage Brands</h2>
+                <button class="modal-close" data-close-modal>&times;</button>
+            </div>
+            <div class="label-manager-add-row">
+                <input type="text" id="social-brand-new" class="input" placeholder="New brand name (e.g. Cooking, Tech)">
+                <button type="button" id="social-brand-add-btn" class="btn btn-primary btn-sm">Add</button>
+            </div>
+            <div id="social-brand-list" class="label-manager-list"></div>
+            <div class="form-actions">
+                <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+                <button type="button" id="social-brand-save-btn" class="btn btn-primary">Save</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== SOCIAL IDEA MODAL ==================== -->
+    <div id="social-idea-modal" class="modal">
+        <div class="modal-overlay" data-close-modal></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="social-idea-modal-title">Add Idea</h2>
+                <button class="modal-close" data-close-modal>&times;</button>
+            </div>
+            <form id="social-idea-form">
+                <input type="hidden" id="social-idea-id">
+                <div class="form-group">
+                    <label for="social-idea-title">Title</label>
+                    <input type="text" id="social-idea-title" class="input" placeholder="Short summary of the idea" required>
+                </div>
+                <div class="form-group">
+                    <label for="social-idea-details">Details</label>
+                    <textarea id="social-idea-details" class="input" rows="4" placeholder="Hook, structure, references, target audience..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="social-idea-status">Status</label>
+                    <select id="social-idea-status" class="input">
+                        <option value="idea">Idea</option>
+                        <option value="drafting">Drafting</option>
+                        <option value="ready">Ready to post</option>
+                        <option value="posted">Posted</option>
+                        <option value="abandoned">Abandoned</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== EXPENSE MODAL ==================== -->
+    <div id="expense-modal" class="modal">
+        <div class="modal-overlay" data-close-modal></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="expense-modal-title">Add Transaction</h2>
+                <button class="modal-close" data-close-modal>&times;</button>
+            </div>
+            <form id="expense-form">
+                <input type="hidden" id="expense-id">
+                <input type="hidden" id="expense-type" value="expense">
+                <div class="txn-type-toggle">
+                    <button type="button" class="txn-type-btn txn-type-income" id="txn-type-income">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        Income
+                    </button>
+                    <button type="button" class="txn-type-btn txn-type-expense active" id="txn-type-expense">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                        Expense
+                    </button>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="expense-date">Date</label>
+                        <input type="date" id="expense-date" class="input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="expense-category">Category</label>
+                        <select id="expense-category" class="input" required></select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="expense-description">Description</label>
+                    <input type="text" id="expense-description" class="input" placeholder="What was this for?" required>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="expense-amount">Amount (CHF)</label>
+                        <input type="number" id="expense-amount" class="input" step="0.01" min="0.01" placeholder="0.00" required>
+                    </div>
+                    <div class="form-group form-group-toggle">
+                        <label for="expense-budgeted">Include in Budget</label>
+                        <label class="budget-toggle budget-toggle-lg">
+                            <input type="checkbox" id="expense-budgeted" checked>
+                            <span class="budget-toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== YT STATS MODAL ==================== -->
+    <div id="yt-stats-modal" class="modal">
+        <div class="modal-overlay" data-close-modal></div>
+        <div class="modal-content modal-lg">
+            <div class="modal-header">
+                <h2 id="yt-stats-modal-title">Log Channel Stats</h2>
+                <button class="modal-close" data-close-modal>&times;</button>
+            </div>
+            <form id="yt-stats-form">
+                <input type="hidden" id="yt-stats-channel-id">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="yt-stats-date">Date</label>
+                        <input type="date" id="yt-stats-date" class="input" required>
+                    </div>
+                    <div class="form-group"></div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="yt-stats-views">Total Views</label>
+                        <input type="number" id="yt-stats-views" class="input" min="0" placeholder="e.g. 150000">
+                    </div>
+                    <div class="form-group">
+                        <label for="yt-stats-subs">Subscribers</label>
+                        <input type="number" id="yt-stats-subs" class="input" min="0" placeholder="e.g. 12000">
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="yt-stats-impressions">Impressions</label>
+                        <input type="number" id="yt-stats-impressions" class="input" min="0" placeholder="e.g. 500000">
+                    </div>
+                    <div class="form-group">
+                        <label for="yt-stats-watch-hours">Watch Hours</label>
+                        <input type="number" id="yt-stats-watch-hours" class="input" min="0" step="0.1" placeholder="e.g. 250.5">
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Stats</button>
+                </div>
+            </form>
+            <div id="yt-stats-history" style="margin-top: 24px;">
+                <div class="chart-card" id="yt-stats-chart-card" style="display: none;">
+                    <h3>Stats Trend</h3>
+                    <div class="chart-wrapper">
+                        <canvas id="yt-stats-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== IDEA MODAL ==================== -->
+    <div id="idea-modal" class="modal">
+        <div class="modal-overlay" data-close-modal></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="idea-modal-title">Add Idea</h2>
+                <button class="modal-close" data-close-modal>&times;</button>
+            </div>
+            <form id="idea-form">
+                <input type="hidden" id="idea-id">
+                <div class="form-group">
+                    <label for="idea-title">Video Title / Concept</label>
+                    <input type="text" id="idea-title" class="input" placeholder="e.g. Top 10 Tips for..." required>
+                </div>
+                <div class="form-group">
+                    <label for="idea-description">Description / Notes</label>
+                    <textarea id="idea-description" class="input" rows="4" placeholder="Describe the idea, key points to cover..."></textarea>
+                </div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="idea-priority">Priority</label>
+                        <select id="idea-priority" class="input">
+                            <option value="low">Low</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="idea-status">Status</label>
+                        <select id="idea-status" class="input">
+                            <option value="brainstorm">Brainstorm</option>
+                            <option value="planned">Planned</option>
+                            <option value="scripting">Scripting</option>
+                            <option value="filming">Filming</option>
+                            <option value="editing">Editing</option>
+                            <option value="published">Published</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== IMPROVEMENT MODAL ==================== -->
+    <div id="improvement-modal" class="modal">
+        <div class="modal-overlay" data-close-modal></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="improvement-modal-title">Add Improvement</h2>
+                <button class="modal-close" data-close-modal>&times;</button>
+            </div>
+            <form id="improvement-form">
+                <input type="hidden" id="improvement-id">
+                <div class="form-group">
+                    <label for="improvement-title">What to Improve</label>
+                    <input type="text" id="improvement-title" class="input" placeholder="e.g. Better thumbnails" required>
+                </div>
+                <div class="form-group">
+                    <label for="improvement-details">Details</label>
+                    <textarea id="improvement-details" class="input" rows="4" placeholder="How to improve, what to change..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="improvement-category">Category</label>
+                    <select id="improvement-category" class="input">
+                        <option value="content">Content</option>
+                        <option value="editing">Editing</option>
+                        <option value="thumbnails">Thumbnails</option>
+                        <option value="titles">Titles/SEO</option>
+                        <option value="audio">Audio</option>
+                        <option value="engagement">Engagement</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ==================== TIME LOG MODAL ==================== -->
+    <div id="timelog-modal" class="modal">
+        <div class="modal-overlay" data-close-modal></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="timelog-modal-title">Log Time</h2>
+                <button class="modal-close" data-close-modal>&times;</button>
+            </div>
+            <form id="timelog-form">
+                <input type="hidden" id="timelog-id">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="timelog-date">Date</label>
+                        <input type="date" id="timelog-date" class="input" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="timelog-hours">Hours</label>
+                        <input type="number" id="timelog-hours" class="input" step="0.25" min="0.25" placeholder="2.5" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="timelog-task">Task</label>
+                    <select id="timelog-task" class="input">
+                        <option value="research">Research</option>
+                        <option value="scripting">Scripting</option>
+                        <option value="filming">Filming</option>
+                        <option value="editing">Editing</option>
+                        <option value="thumbnails">Thumbnails</option>
+                        <option value="uploading">Uploading/SEO</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="timelog-note">Note</label>
+                    <input type="text" id="timelog-note" class="input" placeholder="What did you work on?">
+                </div>
+                <div class="form-actions">
+                    <button type="button" class="btn btn-secondary" data-close-modal>Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast container -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <script src="js/app.js"></script>
+    <script src="js/home3d.js"></script>
+    <script src="js/notes.js"></script>
+    <script src="js/trading.js"></script>
+    <script src="js/ai-coach.js"></script>
+    <script src="js/social.js"></script>
+    <script src="js/finances.js"></script>
+</body>
+</html>
